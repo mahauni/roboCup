@@ -61,6 +61,7 @@ void loop() {
     }
     Serial.println("A arma sendo ativada");
     weaponStep++;
+    //after weapon being all pushed
     if (weaponStep == 200) {
       Serial.println("A arma foi ativada");
       weaponState = 1;
@@ -72,6 +73,7 @@ void loop() {
 
   if (weaponState == 1 && millis() - startTime > 5000) {
     Serial.printlnI("Arma esta sendo desativada");
+    //after weapon being all pushed
     weaponStep++;
     if (weaponStep == 200) {
       Serial.printlnI("Arma foi desativada");
