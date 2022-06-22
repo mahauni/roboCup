@@ -5,7 +5,6 @@ int weaponSen = 52;
 int weaponState = 0;
 int weaponStep = 0;
 unsigned long startTime = 0;
-unsigned long maxTime = 0;
 int superPosition = 0;
 int val = 0;
 
@@ -56,10 +55,9 @@ void loop() {
   }
 
   val = digitalRead(weaponSen);
-  if (weaponState == 0 && (val == 1 || superPosition == 1 && millis() - startTime < 6000)) {
+  if (weaponState == 0 && (val == 1 || superPosition == 1)) {
     if (superPosition == 0) {
       superPosition = 1;
-      startTime = millis();
     }
     Serial.println("A arma sendo ativada");
     weaponStep++;
@@ -68,11 +66,12 @@ void loop() {
       Serial.println("A arma foi ativada");
       weaponState = 1;
       weaponStep = 0;
-      maxTime = millis();
+      startTime = millis();
+      superPosition == 0;
     }
   }
 
-  if (weaponState == 1 && millis() - maxTime > 5000) {
+  if (weaponState == 1 && millis() - startTime > 5000) {
     Serial.printlnI("Arma esta sendo desativada");
     //after weapon being all pushed
     weaponStep++;
@@ -80,7 +79,6 @@ void loop() {
       Serial.printlnI("Arma foi desativada");
       weaponState = 0;
       weaponStep = 0;
-      startTime = millis();
     }
   }
 }
