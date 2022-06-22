@@ -7,6 +7,7 @@ int weaponStep = 0;
 unsigned long startTime = 0;
 unsigned long maxTime = 0;
 int superPosition = 0;
+int val = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -54,17 +55,8 @@ void loop() {
     }
   }
 
-
-  // problemas
-  //
-  // a arma dps que o sensor para de ficar ativado, a arma vai parar de andar para frente, podendo nem chegar ao seu alvo
-  // precisa ter algo, que quando o sensor identificar, entao ele vai para frente. e faz isso por um tempo determinado.. 
-  // usando o mesmo metodo para contar quando voltar depois de um tempo..
-  //
-  // a arma nao vai voltar depois de um tempo determinado
-  // para arrumar isso usar o clock que tem no arduino (existe algo para fazer isso funcionar, mas eu nao sei o nome do commando)
-
-  if (weaponState == 0 && (digitalRead(weaponSen) == "HIGH" || superPosition == 1 && millis() - startTime < 6000)) {
+  val = digitalRead(weaponSen);
+  if (weaponState == 0 && (val == 1 || superPosition == 1 && millis() - startTime < 6000)) {
     if (superPosition == 0) {
       superPosition = 1;
       startTime = millis();
@@ -72,7 +64,7 @@ void loop() {
     Serial.println("A arma sendo ativada");
     weaponStep++;
     //after weapon being all pushed
-    if (weaponStep == 500) {
+    if (weaponStep == 200) {
       Serial.println("A arma foi ativada");
       weaponState = 1;
       weaponStep = 0;
@@ -80,11 +72,11 @@ void loop() {
     }
   }
 
-  if (weaponState == 1 && millis() - maxTime > 10000) {
+  if (weaponState == 1 && millis() - maxTime > 5000) {
     Serial.printlnI("Arma esta sendo desativada");
     //after weapon being all pushed
     weaponStep++;
-    if (weaponStep == 500) {
+    if (weaponStep == 200) {
       Serial.printlnI("Arma foi desativada");
       weaponState = 0;
       weaponStep = 0;
